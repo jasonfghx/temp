@@ -1,0 +1,96 @@
+from PIL import ImageFont
+from PIL import Image
+from PIL import ImageDraw
+import sys
+import textwrap
+import uuid
+import random
+import os
+import json
+from random import choice
+import textwrap
+
+# get quote from quotebase
+with open('quote.json') as quote_base:
+    quote_content = json.load(quote_base)
+
+quote_list = []
+for item in quote_content['items']:
+    article = item['article']
+    for quote in item['content']:
+        quote_list.append({"article": article, "quote": quote})
+
+daily_random_quote = choice(quote_list)
+daily_random_quote_article = daily_random_quote['article']
+daily_random_quote_content = daily_random_quote['quote']
+quote_text_content = daily_random_quote_content
+quote_reference_text =  "《" + daily_random_quote_article + " · 黃帝內經素問》"
+
+# quote font
+system_font = "Quote.ttf"
+
+# image size
+image_size_x = 600 # x
+image_size_y = 600  # y
+
+# quote text position
+x = image_size_x / 2
+y = image_size_y / 2
+
+# text color
+colour = 'rgb(60, 60, 60)' #dark grey
+
+# get background image & initialise the drawing context with the image object as background
+bg_image = Image.open('background.png')
+draw = ImageDraw.Draw(bg_image)
+
+# quote size determination, textwrap & draw the image
+if len(daily_random_quote_content) < 77:
+    system_font_size = 30 * 2
+    reference_font_size = 18 * 2
+    quote_text = textwrap.fill((textwrap.dedent(quote_text_content).strip()), 12)
+    quote_font = ImageFont.truetype(system_font, system_font_size)
+    quote_reference_font = ImageFont.truetype(system_font, reference_font_size)
+    draw.text((x, (y + 120)), quote_text, fill = colour, font = quote_font)
+    offset = quote_font.getsize_multiline(quote_text)[1]
+    draw.text((x, (y + offset + 150)), quote_reference_text, fill = colour, font = quote_reference_font)
+
+elif len(daily_random_quote_content) < 135:
+    system_font_size = 20 * 2
+    reference_font_size = 18 * 2
+    quote_text = textwrap.fill((textwrap.dedent(quote_text_content).strip()), 18)
+    quote_font = ImageFont.truetype(system_font, system_font_size)
+    quote_reference_font = ImageFont.truetype(system_font, reference_font_size)
+    draw.text((x, (y + 60)), quote_text, fill = colour, font = quote_font)
+    offset = quote_font.getsize_multiline(quote_text)[1]
+    draw.text((x, (y + offset + 90)), quote_reference_text, fill = colour, font = quote_reference_font)
+
+elif len(daily_random_quote_content) < 230:
+    system_font_size = 18 * 2
+    reference_font_size = 14 * 2
+    quote_text = textwrap.fill((textwrap.dedent(quote_text_content).strip()), 20)
+    quote_font = ImageFont.truetype(system_font, system_font_size)
+    quote_reference_font = ImageFont.truetype(system_font, reference_font_size)
+    draw.text((x, (y + 20)), quote_text, fill = colour, font = quote_font)
+    offset = quote_font.getsize_multiline(quote_text)[1]
+    draw.text((x, (y + offset + 50)), quote_reference_text, fill = colour, font = quote_reference_font)
+
+elif len(daily_random_quote_content) < 355:
+    system_font_size = 14 * 2
+    references_font_size = 12
+    quote_text = textwrap.fill((textwrap.dedent(quote_text_content).strip()), 26)
+    quote_font = ImageFont.truetype(system_font, system_font_size)
+    quote_reference_font = ImageFont.truetype(system_font, reference_font_size)
+    draw.text((x, (y + 10)), quote_text, fill = colour, font = quote_font)
+    offset = quote_font.getsize_multiline(quote_text)[1]
+    draw.text((x, (y + offset + 40)), quote_reference_text, fill = colour, font = quote_reference_font)
+    
+else:
+    system_font_size = 48 * 2
+    quote_text = quote_text_content
+    quote_font = ImageFont.truetype(system_font, system_font_size)
+    draw.text((x, y), "《黃帝內經素問》", fill = colour, font = quote_font)
+
+# create unique name
+image_name = '{name}.png'.format(name = str(uuid.uuid4()))
+bg_image.save(image_name)
