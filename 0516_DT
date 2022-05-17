@@ -24,3 +24,4 @@ y_pred_gini = clf_gini.predict(X_test)
 
 https://gist.github.com/pb111/af439e4affb1dd94879579cfd6793770
 https://stats.stackexchange.com/questions/2151/how-to-plot-roc-curves-in-multiclass-classification#
+https://github.com/erhwenkuo/deep-learning-with-keras-notebooks/blob/master/1.7-autoencoder.ipynb
