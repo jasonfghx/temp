@@ -1,44 +1,19 @@
-data1=pd.read_csv("C:\\Users\\ADSL\\Downloads\\df_dm2.csv")
-X = data1.drop(['readmitted'], axis=1)
-
-y = data1['readmitted']
-from sklearn.model_selection import train_test_split
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.33, random_state = 42)
-import category_encoders as ce
-encoder = ce.OrdinalEncoder(cols=['age','examide', 'citoglipton'])
-
-
-X_train = encoder.fit_transform(X_train)
-
-X_test = encoder.transform(X_test)
-
-from sklearn.tree import DecisionTreeClassifier
-clf_gini = DecisionTreeClassifier(criterion='entropy', max_depth=3, random_state=0)
-
-
-# fit the model
-clf_gini.fit(X_train, y_train)
-
-y_pred_gini = clf_gini.predict(X_test)
-
-https://gist.github.com/pb111/af439e4affb1dd94879579cfd6793770
-https://stats.stackexchange.com/questions/2151/how-to-plot-roc-curves-in-multiclass-classification#
-https://github.com/erhwenkuo/deep-learning-with-keras-notebooks/blob/master/1.7-autoencoder.ipynb
-https://colab.research.google.com/github/rickwierenga/notebooks/blob/master/autoencoders.ipynb#scrollTo=2kWUdt_frO5q
-
-
-    
- import plotly.express as px
+import plotly.express as px
 import pandas as pd
 
 df = pd.DataFrame([
-    dict(Task="Job A", Start='2009-01-01', Finish='2009-02-28',ratio="30%", Color='blue'),
-    dict(Task="Job B", Start='2009-03-05', Finish='2009-04-15',Color='blue'),
-    dict(Task="Job C", Start='2009-02-20', Finish='2009-05-30',Color='blue'),
-    dict(Task="Job A", Start='2009-01-01', Finish='2009-02-15', Color='red'),
+    dict(Task="201.75", Start=2.8, Finish=2.8+34),
+    dict(Task="180", Start=2.8, Finish=2.8+28),
+    dict(Task="155.25", Start=2.8, Finish=32.8)
 ])
+df['delta'] = df['Finish'] - df['Start']
 
-fig = px.timeline(df, x_start="Start", x_end="Finish", y="Task", text='ratio',color="Color") # textposition argument not possible
-fig.update_traces(textposition='outside',textfont_size=44)
+fig = px.timeline(df, x_start="Start", x_end="Finish", y="Task")
+fig.update_yaxes(autorange="reversed") 
+
+fig.layout.xaxis.type = 'linear'
+fig.data[0].x = df.delta.tolist()
+# f = fig.full_figure_for_development(warn=False)
+for data in fig.data:
+    data["width"] = [0.45,0.31,0.48]
 fig.show()
