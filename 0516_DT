@@ -17,3 +17,7 @@ fig.data[0].x = df.delta.tolist()
 for data in fig.data:
     data["width"] = [0.45,0.31,0.48]
 fig.show()
+
+
+# 這參考
+https://github.com/fferroni/DEC-Keras/blob/master/example.py
