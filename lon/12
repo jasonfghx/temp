@@ -1,1 +1,13 @@
-f
+import pandas as pd
+from pyproj import Transformer
+a=pd.read_csv("C:/Users/ADSL/Desktop/ex/long.csv")
+tran=Transformer.from_crs("epsg:32651",'epsg:4326')
+a["lat"]=None
+a["lon"]=None
+for i in range(0,a.shape[0]):
+    x=a["x"][i]
+    y=a["y"][i]
+    lat,lon=tran.transform(x,y)
+    a["lat"][i]=lat
+    a["lon"][i]=lon
+a.to_csv("out.csv",index=False)
