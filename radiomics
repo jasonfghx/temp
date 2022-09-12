@@ -1,0 +1,15 @@
+!pip install pyradiomics
+
+from glob import glob
+import pandas as pd
+import os
+from radiomics import featureextractor
+tablef=pd.DataFrame()
+imagefile=glob("/content/drive/Shareddrives/影像辨識專題-自己小組/shu的教學資料/pyradiomics/*image.nrrd")
+labelfile=glob("/content/drive/Shareddrives/影像辨識專題-自己小組/shu的教學資料/pyradiomics/*l.nrrd")
+for i in [2,4,5]:
+  temp_image=[v for v in imagefile if str(i)+"_" in v][0]
+  temp_label=[v for v in labelfile if str(i)+"_" in v][0]
+  result = extractor.execute(temp_image, temp_label)
+  table = pd.DataFrame([result])
+  tablef=pd.concat([tablef,table])
